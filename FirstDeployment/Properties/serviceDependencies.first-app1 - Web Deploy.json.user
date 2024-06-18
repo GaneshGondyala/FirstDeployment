@@ -1,0 +1,25 @@
+{
+  "dependencies": {},
+  "parameters": {
+    "first-app1.resourceGroupName": {
+      "Name": "first-app1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "DevOps1"
+    },
+    "first-app1.subscriptionId": {
+      "Name": "first-app1.subscriptionId",
+      "Type": "subscription",
+      "Value": "3fe4726f-f81f-422e-ac89-407e3e520bf3"
+    },
+    "first-app1.resourceGroupLocation": {
+      "Name": "first-app1.resourceGroupLocation",
+      "Type": null,
+      "Value": "centralus"
+    },
+    "first-app1.resourceName": {
+      "Name": "first-app1.resourceName",
+      "Type": null,
+      "Value": "first-app1"
+    }
+  }
+}
