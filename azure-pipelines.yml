@@ -1,0 +1,51 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script: |
+    echo Restore dependencies
+    dotnet restore
+  displayName: 'Restore dependencies'
+
+- script: |
+    echo Build project
+    dotnet build --configuration $(buildConfiguration)
+  displayName: 'Build project'
+
+- script: |
+    echo Run tests
+    dotnet test --configuration $(buildConfiguration) --no-build --verbosity normal
+  displayName: 'Run tests'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '3fe4726f-f81f-422e-ac89-407e3e520bf3'
+    appType: 'webApp'
+    appName: 'second1'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
