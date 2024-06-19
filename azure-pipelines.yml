@@ -1,3 +1,6 @@
+
+
+
 trigger:
 - master
 
@@ -15,19 +18,13 @@ steps:
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - script: |
-    echo Restore dependencies
     dotnet restore
-  displayName: 'Restore dependencies'
-
-- script: |
-    echo Build project
     dotnet build --configuration $(buildConfiguration)
-  displayName: 'Build project'
+  displayName: 'Restore and Build'
 
 - script: |
-    echo Run tests
     dotnet test --configuration $(buildConfiguration) --no-build --verbosity normal
-  displayName: 'Run tests'
+  displayName: 'Run Tests'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -45,7 +42,7 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '3fe4726f-f81f-422e-ac89-407e3e520bf3'
-    appType: 'webApp'
+    azureSubscription: 'subscription-service'  # Replace with the name of your Azure service connection
+    appType: 'webAppLinux' # or 'webApp' if using Windows
     appName: 'second1'
     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
